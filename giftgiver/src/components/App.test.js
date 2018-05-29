@@ -4,6 +4,7 @@ import App from './App';
 
 describe('App', () => {
      const app = shallow(<App />);
+     
 
      it('renders correctly', () => {
         expect(app).toMatchSnapshot();
@@ -14,6 +15,7 @@ describe('App', () => {
      });
 
      describe('when clicking the add-gift button', () => {
+
         beforeEach(() => {
             app.find('.btn-add').simulate('click');
         });
@@ -23,12 +25,28 @@ describe('App', () => {
         });
 
         it('adds a new gift to the `state`', () => {
-            expect(app.state().gifts).toEqual([{id: 1}])
+            expect(app.state().gifts).toEqual([{id}])
         });
           
         it('add a new gift to the rendered list', () => {        
             expect(app.find('.gift-list').children().length).toEqual(1);
         });
+
+        it('creates a gift component', () => {
+            expect(app.find('Gift').exists()).toBe(true);
+        });
      });
+
+     const id = 1;
+
+     describe('and the user wants to remove the added gift', () => {
+         beforeEach(() => {
+            app.instance().removeGift(id);
+         });
+
+         it('removes the gift from state', () => {
+            expect(app.state().gifts).toEqual([]);
+         });
+     })
 });
 
